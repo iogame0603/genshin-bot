@@ -1,0 +1,11 @@
+/.env
+/원신_봇.bat
+/genshin_note.json
+/Test
+/images/diary/*/
+/images/test
+/databases/user_info.db
+/Library/test.py
+
+__pycache__/
+*.pyc
