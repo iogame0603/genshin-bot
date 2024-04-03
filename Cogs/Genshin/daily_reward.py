@@ -63,7 +63,7 @@ class DailyReward(commands.Cog):
             except genshin.errors.InvalidCookies:
                 continue
             except Exception as e:
-                traceback.print_exc()
+                Logging.LOGGER.warning(f"{user_id} 출석체크 중 에러 발생")
                 continue
 
 async def setup(bot: commands.Bot):

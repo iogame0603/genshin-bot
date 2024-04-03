@@ -1,5 +1,5 @@
 import discord
-from discord.ui import Button, View, Select
+from discord.ui import Button, View, Select, Item
 from discord import app_commands
 from discord.ext import commands
 
@@ -10,12 +10,13 @@ from Library.enkaNetwork.exception import HttpException
 from Library.enkaNetwork.model import AvatarInfoDetail, Reliquary
 from Library.enkaNetwork.types import ReliquaryType, ElementColor, ElementType
 
-import traceback
+from Utils.util import Logging
 
 def get_avatar_data(avatarInfoList: List[AvatarInfoDetail], avatarId: Union[int, str]) -> AvatarInfoDetail:
     for avatarInfo in avatarInfoList:
         if str(avatarInfo.id) == str(avatarId):
             return avatarInfo
+    Logging.LOGGER.warning(f"존재하지 않는 avatarId (id: {avatarId})")
     raise ValueError(f"avatarId: {avatarId} 정보를 찾을 수 없음")
 
 def get_element_color(element: str):
@@ -37,6 +38,7 @@ def get_element_color(element: str):
         case ElementType.NONE.value:
             return ElementColor.NONE.value
         case _:
+            Logging.LOGGER.warning(f"존재하지 않는 원소 타입 (type: {element})")
             raise ValueError(f"존재하지 않는 원소타입 (type: {element})")
 
 def character_info_embed(data: AvatarInfoDetail) -> discord.Embed:
@@ -157,8 +159,8 @@ class CharacterInfoView(View):
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         return interaction.user.id == self.author.id
 
-    async def on_error(self, interaction: discord.Interaction, error: Exception):
-        await interaction.channel.send(content=f"{interaction.user.mention}, 알 수 없는 에러가 발생했습니다.")
+    async def on_error(self, interaction: discord.Interaction, error: Exception, item: Item):
+        await interaction.response.send_message(content="알 수 없는 에러가 발생했습니다.", ephemeral=True)
 
     async def on_timeout(self) -> None:
         await self.message.edit(view=None)
@@ -245,13 +247,18 @@ class CharacterReliquaryView(View):
             case ReliquaryType.circlet.value:
                 return "왕관"
             case _:
-                raise ValueError(f"존재하지 않는 타입 (type: {reliquaryType})")
+                Logging.LOGGER.warning(f"존재하지 않는 성유물 타입 (type: {reliquaryType})")
+                raise ValueError(f"존재하지 않는 성유물 타입 (type: {reliquaryType})")
 
     def get_reliquary_data(self, reliquaryType: str) -> Reliquary:
         for r in self.avatarInfo.reliquaryList:
             if r.type == reliquaryType:
                 return r
-        raise ValueError(f"존재하지 않는 타입 (type: {reliquaryType})")
+        Logging.LOGGER.warning(f"존재하지 않는 성유물 타입 (type: {reliquaryType})")
+        raise ValueError(f"존재하지 않는 성유물 타입 (type: {reliquaryType})")
+
+    async def on_error(self, interaction: discord.Interaction, error: Exception, item: Item):
+        await interaction.response.send_message(content="알 수 없는 에러가 발생했습니다.", ephemeral=True)
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         return interaction.user.id == self.author.id
@@ -277,9 +284,8 @@ class CharacterInfo(commands.Cog):
             characterInfoView.message = await interaction.followup.send(embed=character_info_embed(data.avatarInfoList[0]),
                                                                         view=characterInfoView)
         except HttpException:
+            Logging.LOGGER.warning("데이터 로드 실패")
             await interaction.followup.send(content="데이터를 불러오는데 실패하였습니다.")
-            traceback.print_exc()
-
 
     @app_commands.command(name="에셋_업데이트", description="enka network assets를 업데이트합니다.")
     @commands.is_owner()
@@ -287,9 +293,12 @@ class CharacterInfo(commands.Cog):
         await interaction.response.defer(ephemeral=True)
 
         client = EnkaNetworkClient()
-        await client.update_assets()
-        await interaction.followup.send(content="에셋 업데이트가 완료되었습니다.", ephemeral=True)
-
+        try:
+            await client.update_assets()
+            await interaction.followup.send(content="에셋 업데이트가 완료되었습니다.", ephemeral=True)
+        except:
+            Logging.LOGGER.warning("enka network 에셋 업데이트 실패")
+            await interaction.followup.send(content="에셋 업데이트 실패", ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(CharacterInfo(bot))

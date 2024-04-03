@@ -2,8 +2,7 @@ import sqlite3
 
 from Types.cookie_type import CookieTypeLiteral, CookieType
 from dotenv import load_dotenv
-from Utils.util import RSA_CRYPTO
-from typing import Literal
+from Utils.util import RSA_CRYPTO, Logging
 
 load_dotenv()
 
@@ -35,10 +34,10 @@ def __connect_database(func):
             return result
         except sqlite3.Error as se:
             database_close(cursor, conn)
-            raise print(f"sqltie3 ERROR: {se}")
+            Logging.LOGGER.error(f"database 작업 중 에러 발생")
         except Exception as e:
             database_close(cursor, conn)
-            raise print(f"sqlite3 Exception: {e}")
+            Logging.LOGGER.error(f"database 작업 중 에러 발생")
     return connect_database
 
 

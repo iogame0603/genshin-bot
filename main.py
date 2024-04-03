@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 
 import traceback
+from Utils.util import Logging
 
 load_dotenv()
 
@@ -47,8 +48,7 @@ async def on_app_command_error(interaction: discord.Interaction, error: discord.
         case exc.GenshinInvalidCookies:
             await interaction.followup.send(content=f"유효하지 않은 쿠키입니다.")
         case _:
-            print(f"command name: /{interaction.data['name']}\n{error}")
-            traceback.print_exc()
-            await interaction.followup.send(content="알 수 없는 에러가 발생했습니다.")
+            Logging.LOGGER.exception(f"알 수 없는 에러")
+            await interaction.followup.send(content="알 수 없는 에러가 발생했습니다.", ephemeral=True)
             
 bot.run(DISCORD_BOT_TOKEN)

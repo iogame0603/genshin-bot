@@ -149,15 +149,12 @@ class Pagination():
 import logging
 from datetime import datetime
 
-# class Logging:
-#     LOGGER = logging.getLogger(__name__)
+class Logging:
+    LOGGER = logging.getLogger(__name__)
 
-#     logging.basicConfig(
-#         filename=f"/Log/{datetime.now().strftime('%Y%m')}.log",
-#         format="%(asctime)s [%(levelName)s]\t%(fileName)s\m%(message)s",
-#         datefmt="%Y-%m-%d %H:%M:%S"
-#     )
-
-#     @classmethod
-#     def log_message(self, msg: str):
-#         pass
+    logging.basicConfig(
+        filename=f"Log/{datetime.now().strftime('%Y%m%d')}.log",
+        format="%(asctime)s [%(levelname)s]\t%(filename)s (line: %(lineno)d) --> %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        level=30
+    )

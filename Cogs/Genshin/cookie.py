@@ -16,7 +16,6 @@ class AddCookieModal(discord.ui.Modal, title="쿠키 등록"):
         await interaction.response.send_message(content="쿠키를 등록하였습니다.")
 
     async def on_error(self, interaction: discord.Interaction, error: Exception):
-        print(f"add cookie ERROR: {error}")
         await interaction.response.send_message(content="쿠키를 등록하지 못했습니다.", ephemeral=True)
 
 class UpdateLtuidV2Modal(discord.ui.Modal, title="ltuid_v2 수정"):
@@ -27,7 +26,6 @@ class UpdateLtuidV2Modal(discord.ui.Modal, title="ltuid_v2 수정"):
         await interaction.response.send_message(content="쿠키를 업데이트하였습니다.", ephemeral=True)
 
     async def on_error(self, interaction: discord.Interaction, error: Exception):
-        print(f"update ltmid_v2 ERROR: {error}")
         await interaction.response.send_message(content="쿠키를 업데이트하지 못했습니다.", ephemeral=True)
 
 class UpdateLtmidV2Modal(discord.ui.Modal, title="ltmid_v2 수정"):
@@ -38,7 +36,6 @@ class UpdateLtmidV2Modal(discord.ui.Modal, title="ltmid_v2 수정"):
         await interaction.response.send_message(content="쿠키를 업데이트하였습니다.", ephemeral=True)
 
     async def on_error(self, interaction: discord.Interaction, error: Exception):
-        print(f"update ltmid_v2 ERROR: {error}")
         await interaction.response.send_message(content="쿠키를 업데이트하지 못했습니다.", ephemeral=True)
 
 class UpdateLtokenV2Modal(discord.ui.Modal, title="ltoken_v2 수정"):
@@ -48,7 +45,6 @@ class UpdateLtokenV2Modal(discord.ui.Modal, title="ltoken_v2 수정"):
         update_cookies(user_id=interaction.user.id, cookie_type=CookieType.LTOKEN_V2, cookie=self.cookie.value)
 
     async def on_error(self, interaction: discord.Interaction, error: Exception):
-        print(f"update ltoken_v2 ERROR: {error}")
         await interaction.response.send_message(content="쿠키를 업데이트하지 못했습니다.", ephemeral=True)
 
 class GenshinCookie(commands.Cog):

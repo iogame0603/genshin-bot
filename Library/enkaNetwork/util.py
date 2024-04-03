@@ -3,6 +3,8 @@ from typing import Union, Dict, List, Any
 import json
 import aiofiles
 
+from Utils.util import Logging
+
 class Util:
     @classmethod
     def get_img_url(cls, iconName: str) -> str:
@@ -24,7 +26,7 @@ class Util:
             data = cls.get_json_data(assetName=Config.GITHUB_ASSET.LOC)
             return data[Config.LANG][str(id)]
         except KeyError:
-            print(f"WARNNING:: NotFound name, id: {id}, lang: {Config.LANG}")
+            Logging.LOGGER.warning(f"찾을 수 없는 이름 (id: {id}, lang: {Config.LANG})")
             return ""
         
     @classmethod
@@ -33,7 +35,7 @@ class Util:
             data = cls.get_json_data(assetName=Config.CHARACTER)
             return cls.get_img_url(data[str(id)]["SideIconName"].replace("_Side", "") + "_Circle")
         except KeyError:
-            print(f"WARNNING:: NotFound avatarId: {id}")
+            Logging.LOGGER.warning(f"찾을 수 없는 프로필 사진 (avatarId: {id})")
             return ""
         
     @classmethod
@@ -42,7 +44,7 @@ class Util:
             data = cls.get_json_data(assetName=Config.GITHUB_ASSET.PFPS)
             return cls.get_img_url(data[str(id)]["iconPath"])
         except KeyError:
-            print(f"WARNNING:: NotFound id: {id}")
+            Logging.LOGGER.warning(f"찾을 수 없는 프로필 사진 (id: {id})")
             return ""
         
     @classmethod
@@ -51,7 +53,7 @@ class Util:
             data = cls.get_json_data(assetName=Config.GITHUB_ASSET.NAME_CARDS)
             return cls.get_img_url(iconName=data[str(id)]["icon"])
         except KeyError:
-            print(f"WARNNING:: NotFound namecardId: {id}")
+            Logging.LOGGER.warning(f"찾을 수 없는 nameCard (id: {id})")
             return ""
         
     @classmethod
@@ -98,5 +100,5 @@ class Util:
             textMapKr = await cls.get_json_data_async(Config.GITLAB_ASSET.TEXTMAP_KR)
             return textMapKr[str(id)]
         except KeyError:
-            print(f"알 수 없는 성유물 id (id: {id})")
+            Logging.LOGGER.warning(f"알 수 없는 성유물 id (id: {id})")
             return ""
