@@ -33,20 +33,14 @@ class Reliquary(BaseEquip):
     mainStat: Union[StatVal, StatValPer]
     subStatList: List[Union[StatVal, StatValPer]]
 
-    _nameTextHashId: Union[int, str] = PrivateAttr()
+    _nameTextHashId: Union[int, str]
 
-    @classmethod
-    async def set_reliquary_name(cls):
-        cls.name = await Util.get_reliquary_name(cls.nameTextHashId)
-
-    @property
-    def nameTextHashId(self):
-        return self._nameTextHashId
+    async def set_reliquary_name(self):
+        self.name = await Util.get_reliquary_name(self._nameTextHashId)
 
     def __init__(self, **data):
         _flat = data["flat"]
 
-        data["_nameTextHashId"] = _flat["nameTextMapHash"]
         data["setName"] = Util.get_localizations(id=_flat["setNameTextMapHash"])
         data["level"] = data["reliquary"]["level"] - 1
         data["type"] = _flat["equipType"]
@@ -65,6 +59,8 @@ class Reliquary(BaseEquip):
                 subStatList.append(StatValPer(type=Util.get_localizations(subStat["appendPropId"]), value=subStat["statValue"]))
             data["subStatList"] = subStatList
         super().__init__(**data)
+
+        self._nameTextHashId = _flat["nameTextMapHash"]
 
 class Weapon(BaseEquip):
     stats: List[Union[StatVal, StatValPer]]

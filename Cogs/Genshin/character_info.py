@@ -193,6 +193,7 @@ class ReliquaryBtn(Button):
 
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.defer()
+        await self.reliquaryData.set_reliquary_name()
 
         statValues = ""
         for stat in self.reliquaryData.subStatList:
