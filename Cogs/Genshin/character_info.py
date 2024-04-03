@@ -142,10 +142,8 @@ class CharacterReliquaryBtn(Button):
 
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.defer()
-        await interaction.followup.edit_message(interaction.message.id,
-                                                view=CharacterReliquaryView(interaction.user, 
-                                                                            self.avatarId,
-                                                                            self.avatarInfoList))
+        characterReliquaryView = CharacterReliquaryView(interaction.user, self.avatarId, self.avatarInfoList)
+        characterReliquaryView.message = await interaction.followup.edit_message(interaction.message.id, view=characterReliquaryView)
 
 class CharacterInfoView(View):
     def __init__(self, author: Union[discord.User, discord.Member], data: List[AvatarInfoDetail], avatarId: Union[int, str]):
