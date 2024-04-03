@@ -250,15 +250,15 @@ class CharacterReliquaryView(View):
     def get_reliquary_type_name(self, reliquaryType: str) -> str:
         match reliquaryType:
             case ReliquaryType.flower.value:
-                return "꽃"
+                return "생명의 꽃"
             case ReliquaryType.feather.value:
-                return "깃털"
+                return "죽음의 깃털"
             case ReliquaryType.sands.value:
-                return "시계"
+                return "시간의 모래"
             case ReliquaryType.goblet.value:
-                return "성배"
+                return "공간의 성배"
             case ReliquaryType.circlet.value:
-                return "왕관"
+                return "이성의 왕관"
             case _:
                 Logging.LOGGER.warning(f"존재하지 않는 성유물 타입 (type: {reliquaryType})")
                 raise ValueError(f"존재하지 않는 성유물 타입 (type: {reliquaryType})")
