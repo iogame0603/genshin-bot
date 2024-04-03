@@ -62,7 +62,22 @@ def character_info_embed(data: AvatarInfoDetail) -> discord.Embed:
 치명타 피해: {data.stats.CRIT_DMG.value2percent()}
 원소 충전 효율: {data.stats.ENERGY_RECHANGE.value2percent()}
 """
-    #TODO : 원소피해증가
+    if data.stats.PHYSICAL_DMG_BONUS.value != 0:
+        avatarStats += f"물리 피해 보너스: {data.stats.PHYSICAL_DMG_BONUS.value2percent()}\n"
+    if data.stats.PYRO_DMG_BONUS.value != 0:
+        avatarStats += f"불 원소 피해 보너스: {data.stats.PYRO_DMG_BONUS.value2percent()}\n"
+    if data.stats.ELECTRO_DMG_BONUS.value != 0:
+        avatarStats += f"번개 원소 피해 보너스: {data.stats.ELECTRO_DMG_BONUS.value2percent()}\n"
+    if data.stats.HYDRO_DMG_BONUS.value != 0:
+        avatarStats += f"물 원소 피해 보너스: {data.stats.HYDRO_DMG_BONUS.value2percent()}\n"
+    if data.stats.DENDRO_DMG_BONUS.value != 0:
+        avatarStats += f"풀 원소 피해 보너스: {data.stats.DENDRO_DMG_BONUS.value2percent()}\n"
+    if data.stats.ANEMO_DMG_BONUS.value != 0:
+        avatarStats += f"바람 원소 피해 보너스: {data.stats.ANEMO_DMG_BONUS.value2percent()}\n"
+    if data.stats.GEO_DMG_BONUS.value != 0:
+        avatarStats += f"바위 원소 피해 보너스: {data.stats.GEO_DMG_BONUS.value2percent()}\n"
+    if data.stats.CYRO_DMG_BONUS.value != 0:
+        avatarStats += f"얼음 원소 피해 보너스: {data.stats.CYRO_DMG_BONUS.value2percent()}\n"
 
     embed.add_field(name="스탯", value=avatarStats, inline=True)
     return embed
