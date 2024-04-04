@@ -32,7 +32,7 @@ class Util:
     @classmethod
     def get_profile_img_by_avatarId(cls, id: Union[int, str]) -> str:
         try:
-            data = cls.get_json_data(assetName=Config.CHARACTER)
+            data = cls.get_json_data(assetName=Config.GITHUB_ASSET.CHARACTER)
             return cls.get_img_url(data[str(id)]["SideIconName"].replace("_Side", "") + "_Circle")
         except KeyError:
             Logging.LOGGER.warning(f"찾을 수 없는 프로필 사진 (avatarId: {id})")
