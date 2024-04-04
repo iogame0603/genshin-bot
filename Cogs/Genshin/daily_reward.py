@@ -2,6 +2,7 @@ import genshin
 import discord
 from discord.ext import commands, tasks
 from discord import app_commands
+from discord.app_commands import Choice
 from Utils.Database.query import *
 from Utils.Genshin.cookie import *
 import exception as exc
@@ -12,7 +13,13 @@ class DailyReward(commands.Cog):
         self.auto_daily_check.start()
 
     @app_commands.command(name="출석체크", description="출석체크를 합니다.")
-    async def daily_reward_check(self, interaction: discord.Interaction):
+    @app_commands.describe(game="출석체크를 할 게임입니다.")
+    @app_commands.choices(game=[
+        Choice(name="원신", value=genshin.types.Game.GENSHIN),
+        Choice(name="붕괴", value=genshin.types.Game.HONKAI),
+        Choice(name="스타레일", value=genshin.types.Game.STARRAIL)
+    ])
+    async def daily_reward_check(self, interaction: discord.Interaction, game: Choice[str]):
         await interaction.response.defer()
 
         client = get_genshin_client(user_id=interaction.user.id)
@@ -20,7 +27,7 @@ class DailyReward(commands.Cog):
             raise exc.GenshinCookieException
 
         try:
-            reward = await client.claim_daily_reward(game=genshin.types.Game.GENSHIN)
+            reward = await client.claim_daily_reward(game=game.value)
 
             rewardEmbed = discord.Embed(title=f"출석체크 보상")
             rewardEmbed.set_thumbnail(url=reward.icon)
@@ -31,7 +38,9 @@ class DailyReward(commands.Cog):
         except genshin.errors.AlreadyClaimed:
             await interaction.followup.send("이미 출석체크를 했습니다.")
         except genshin.errors.InvalidCookies:
-            await interaction.followup.send("유효하지 않은 쿠키입니다.")
+            raise exc.GenshinInvalidCookies
+        except genshin.errors.GenshinException:
+            await interaction.followup.send(f"{game.name} 계정을 찾을 수 없습니다.")
 
     @tasks.loop(minutes=1)
     async def auto_daily_check(self):
