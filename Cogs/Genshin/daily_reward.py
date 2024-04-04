@@ -6,8 +6,6 @@ from Utils.Database.query import *
 from Utils.Genshin.cookie import *
 import exception as exc
 
-import traceback
-
 class DailyReward(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
