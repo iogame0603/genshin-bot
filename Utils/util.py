@@ -156,5 +156,6 @@ class Logging:
         filename=f"Log/{datetime.now().strftime('%Y%m%d')}.log",
         format="%(asctime)s [%(levelname)s]\t%(filename)s (line: %(lineno)d) --> %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
+        filemode="w",
         level=30
     )
