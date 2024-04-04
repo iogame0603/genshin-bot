@@ -126,7 +126,7 @@ class CharacterWeaponBtn(Button):
             elif type(weaponStat.value) == float:
                 weaponStats += f"{weaponStat.type}: {weaponStat.value2percent()}\n"
 
-        embed = discord.Embed(title=weapon.name)
+        embed = discord.Embed(title=weapon.name, color=get_element_color(self.data.element))
         embed.set_thumbnail(url=weapon.icon)
         embed.add_field(name="무기 스탯", value=weaponStats)
         embed.set_footer(text=self.data.name, icon_url=self.data.icon)
