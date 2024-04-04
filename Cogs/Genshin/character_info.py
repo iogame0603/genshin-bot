@@ -135,10 +135,10 @@ class CharacterWeaponBtn(Button):
                                                 embed=embed)
 
 class CharacterReliquaryBtn(Button):
-    def __init__(self, avatarId: Union[int, str], avatarInfoList: List[AvatarInfoDetail]):
+    def __init__(self, avatarId: Union[int, str], avatarInfoList: List[AvatarInfoDetail], disabled: bool = False):
         self.avatarId = avatarId
         self.avatarInfoList = avatarInfoList
-        super().__init__(label="성유물")
+        super().__init__(label="성유물", disabled=disabled)
 
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.defer()
@@ -149,13 +149,16 @@ class CharacterInfoView(View):
     def __init__(self, author: Union[discord.User, discord.Member], data: List[AvatarInfoDetail], avatarId: Union[int, str]):
         self.author = author
         self.data = data
-        super().__init__(timeout=60)
+        super().__init__(timeout=None)
 
         avatarInfo = get_avatar_data(avatarInfoList=data, avatarId=avatarId)
         self.add_item(item=CharacterSelect(data=data))
         self.add_item(item=CharacterInfoBtn(data=avatarInfo))
         self.add_item(item=CharacterWeaponBtn(data=avatarInfo))
-        self.add_item(item=CharacterReliquaryBtn(avatarId=avatarId, avatarInfoList=data))
+        if avatarInfo.reliquaryList == []:
+            self.add_item(item=CharacterReliquaryBtn(avatarId=avatarId, avatarInfoList=data, disabled=True))
+        else:
+            self.add_item(item=CharacterReliquaryBtn(avatarId=avatarId, avatarInfoList=data))
 
     @classmethod
     def from_message(cls, message: discord.Message, data: List[AvatarInfoDetail], avatarId: Union[int, str]):
@@ -166,7 +169,10 @@ class CharacterInfoView(View):
         cls.add_item(CharacterSelect(data=data))
         cls.add_item(CharacterInfoBtn(data=avatarInfo))
         cls.add_item(CharacterWeaponBtn(data=avatarInfo))
-        cls.add_item(CharacterReliquaryBtn(avatarId=avatarId, avatarInfoList=data))
+        if avatarInfo.reliquaryList == []:
+            cls.add_item(item=CharacterReliquaryBtn(avatarId=avatarId, avatarInfoList=data, disabled=True))
+        else:
+            cls.add_item(item=CharacterReliquaryBtn(avatarId=avatarId, avatarInfoList=data))
         return cls
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
@@ -229,7 +235,7 @@ class CharacterReliquaryView(View):
         self.avatarInfo = get_avatar_data(avatarId=avatarId, avatarInfoList=avatarInfoList)
         self.author = author
 
-        super().__init__(timeout=60)
+        super().__init__(timeout=None)
 
         self.add_item(ReliquaryBackBtn(self.author, self.avatarId, self.avatarInfoList))
 
@@ -279,7 +285,7 @@ class CharacterReliquaryView(View):
     async def on_timeout(self) -> None:
         await self.message.edit(view=None)
 
-class CharacterInfo(commands.Cog):
+class GenshinCharacterInfo(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
@@ -314,4 +320,4 @@ class CharacterInfo(commands.Cog):
             await interaction.followup.send(content="에셋 업데이트 실패", ephemeral=True)
 
 async def setup(bot: commands.Bot):
-    await bot.add_cog(CharacterInfo(bot))
+    await bot.add_cog(GenshinCharacterInfo(bot))
