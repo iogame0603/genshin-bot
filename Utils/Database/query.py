@@ -1,6 +1,6 @@
 import sqlite3
 
-from Types.cookie_type import CookieTypeLiteral, CookieType
+from Types.cookie_type import Cookie
 from dotenv import load_dotenv
 from Utils.util import RSA_CRYPTO, Logging
 
@@ -60,7 +60,7 @@ def __create_cookie_info_table(cursor: sqlite3.Cursor):
 
 @__connect_database
 def select_cookies(cursor: sqlite3.Cursor, user_id: int):
-    query = f"SELECT {CookieType.LTUID_V2}, {CookieType.LTMID_V2}, {CookieType.LTOKEN_V2} FROM USER_INFO WHERE USER_ID = ?"
+    query = f"SELECT {Cookie.LTUID_V2}, {Cookie.LTMID_V2}, {Cookie.LTOKEN_V2} FROM USER_INFO WHERE USER_ID = ?"
     cursor.execute(query, (user_id,))
     return cursor.fetchone()
 
@@ -74,7 +74,7 @@ def insert_cookies(cursor: sqlite3.Cursor, user_id: int, ltuid_v2: str, ltmid_v2
     cursor.execute(query, (user_id, ltuid_v2, ltmid_v2, ltoken_v2))
 
 @__connect_database
-def update_cookies(cursor: sqlite3.Cursor, user_id: int, cookie_type: CookieTypeLiteral, cookie: str):
+def update_cookies(cursor: sqlite3.Cursor, user_id: int, cookie_type: Cookie, cookie: str):
     query = f"UPDATE USER_INFO SET {cookie_type.upper()} = ? WHERE USER_ID = ?"
 
     if cookie != "":

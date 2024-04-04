@@ -7,9 +7,9 @@ from Types.cookie_type import *
 from Utils.Genshin.cookie import get_cookies
 
 class AddCookieModal(discord.ui.Modal, title="쿠키 등록"):
-    ltuid_v2 = discord.ui.TextInput(label=CookieType.LTUID_V2, placeholder=CookieType.LTUID_V2 + "를 입력해주세요.")
-    ltmid_v2 = discord.ui.TextInput(label=CookieType.LTMID_V2, placeholder=CookieType.LTMID_V2 + "를 입력해주세요.")
-    ltoken_v2 = discord.ui.TextInput(label=CookieType.LTOKEN_V2, placeholder=CookieType.LTOKEN_V2 + "를 입력해주세요.")
+    ltuid_v2 = discord.ui.TextInput(label=Cookie.LTUID_V2, placeholder=Cookie.LTUID_V2 + "를 입력해주세요.")
+    ltmid_v2 = discord.ui.TextInput(label=Cookie.LTMID_V2, placeholder=Cookie.LTMID_V2 + "를 입력해주세요.")
+    ltoken_v2 = discord.ui.TextInput(label=Cookie.LTOKEN_V2, placeholder=Cookie.LTOKEN_V2 + "를 입력해주세요.")
 
     async def on_submit(self, interaction: discord.Interaction):
         insert_cookies(user_id=interaction.user.id, ltuid_v2=self.ltuid_v2.value, ltmid_v2=self.ltmid_v2.value, ltoken_v2=self.ltoken_v2.value)
@@ -18,31 +18,31 @@ class AddCookieModal(discord.ui.Modal, title="쿠키 등록"):
     async def on_error(self, interaction: discord.Interaction, error: Exception):
         await interaction.response.send_message(content="쿠키를 등록하지 못했습니다.", ephemeral=True)
 
-class UpdateLtuidV2Modal(discord.ui.Modal, title="ltuid_v2 수정"):
-    cookie = discord.ui.TextInput(label=CookieType.LTUID_V2, placeholder=CookieType.LTUID_V2 + "를 입력해주세요.")
+class UpdateLtuidV2Modal(discord.ui.Modal, title="LTUID_V2 수정"):
+    cookie = discord.ui.TextInput(label=Cookie.LTUID_V2, placeholder=Cookie.LTUID_V2 + "를 입력해주세요.")
 
     async def on_submit(self, interaction: discord.Interaction):
-        update_cookies(user_id=interaction.user.id, cookie_type=CookieType.LTUID_V2, cookie=self.cookie.value)
+        update_cookies(user_id=interaction.user.id, cookie_type=Cookie.LTUID_V2, cookie=self.cookie.value)
         await interaction.response.send_message(content="쿠키를 업데이트하였습니다.", ephemeral=True)
 
     async def on_error(self, interaction: discord.Interaction, error: Exception):
         await interaction.response.send_message(content="쿠키를 업데이트하지 못했습니다.", ephemeral=True)
 
-class UpdateLtmidV2Modal(discord.ui.Modal, title="ltmid_v2 수정"):
-    cookie = discord.ui.TextInput(label=CookieType.LTMID_V2, placeholder=CookieType.LTMID_V2 + "를 입력해주세요.")
+class UpdateLtmidV2Modal(discord.ui.Modal, title="LTMID_V2 수정"):
+    cookie = discord.ui.TextInput(label=Cookie.LTMID_V2, placeholder=Cookie.LTMID_V2 + "를 입력해주세요.")
 
     async def on_submit(self, interaction: discord.Interaction):
-        update_cookies(user_id=interaction.user.id, cookie_type=CookieType.LTMID_V2, cookie=self.cookie.value)
+        update_cookies(user_id=interaction.user.id, cookie_type=Cookie.LTMID_V2, cookie=self.cookie.value)
         await interaction.response.send_message(content="쿠키를 업데이트하였습니다.", ephemeral=True)
 
     async def on_error(self, interaction: discord.Interaction, error: Exception):
         await interaction.response.send_message(content="쿠키를 업데이트하지 못했습니다.", ephemeral=True)
 
-class UpdateLtokenV2Modal(discord.ui.Modal, title="ltoken_v2 수정"):
-    cookie = discord.ui.TextInput(label=CookieType.LTOKEN_V2, placeholder=CookieType.LTOKEN_V2 + "을 입력해주세요.")
+class UpdateLtokenV2Modal(discord.ui.Modal, title="LTOKEN_V2 수정"):
+    cookie = discord.ui.TextInput(label=Cookie.LTOKEN_V2, placeholder=Cookie.LTOKEN_V2 + "을 입력해주세요.")
 
     async def on_submit(self, interaction: discord.Interaction):
-        update_cookies(user_id=interaction.user.id, cookie_type=CookieType.LTOKEN_V2, cookie=self.cookie.value)
+        update_cookies(user_id=interaction.user.id, cookie_type=Cookie.LTOKEN_V2, cookie=self.cookie.value)
 
     async def on_error(self, interaction: discord.Interaction, error: Exception):
         await interaction.response.send_message(content="쿠키를 업데이트하지 못했습니다.", ephemeral=True)
@@ -69,9 +69,9 @@ class GenshinCookie(commands.Cog):
             return
         
         cookie_embed = discord.Embed(title=f"{interaction.user.name}님의 쿠키")
-        cookie_embed.add_field(name=CookieType.LTUID_V2, value=cookies[CookieType.LTUID_V2], inline=False)
-        cookie_embed.add_field(name=CookieType.LTMID_V2, value=cookies[CookieType.LTMID_V2], inline=False)
-        cookie_embed.add_field(name=CookieType.LTOKEN_V2, value=cookies[CookieType.LTOKEN_V2], inline=False)
+        cookie_embed.add_field(name=Cookie.LTUID_V2, value=cookies[Cookie.LTUID_V2], inline=False)
+        cookie_embed.add_field(name=Cookie.LTMID_V2, value=cookies[Cookie.LTMID_V2], inline=False)
+        cookie_embed.add_field(name=Cookie.LTOKEN_V2, value=cookies[Cookie.LTOKEN_V2], inline=False)
 
         await interaction.response.send_message(embed=cookie_embed, ephemeral=True)
 
@@ -98,12 +98,12 @@ class GenshinCookie(commands.Cog):
             await origin_msg.clear_reactions()
 
     @cookie_group.command(name="수정", description="등록된 쿠키를 수정합니다.")
-    async def update_cookie(self, interaction: discord.Interaction, cookie_type: CookieTypeLiteral):
-        if CookieType == CookieType.LTUID_V2:
+    async def update_cookie(self, interaction: discord.Interaction, cookie_type: Cookie):
+        if Cookie == Cookie.LTUID_V2:
             await interaction.response.send_modal(UpdateLtuidV2Modal())
-        elif cookie_type == CookieType.LTMID_V2:
+        elif cookie_type == Cookie.LTMID_V2:
             await interaction.response.send_modal(UpdateLtmidV2Modal())
-        elif cookie_type == CookieType.LTOKEN_V2:
+        elif cookie_type == Cookie.LTOKEN_V2:
             await interaction.response.send_modal(UpdateLtokenV2Modal())
 
     @commands.is_owner()
@@ -113,9 +113,9 @@ class GenshinCookie(commands.Cog):
         cookies = get_cookies(user_id=user_id)
         
         cookie_embed = discord.Embed(title=f"{user_id}님의 쿠키")
-        cookie_embed.add_field(name=CookieType.LTUID_V2, value=cookies[CookieType.LTUID_V2], inline=False)
-        cookie_embed.add_field(name=CookieType.LTMID_V2, value=cookies[CookieType.LTMID_V2], inline=False)
-        cookie_embed.add_field(name=CookieType.LTOKEN_V2, value=cookies[CookieType.LTOKEN_V2], inline=False)
+        cookie_embed.add_field(name=Cookie.LTUID_V2, value=cookies[Cookie.LTUID_V2], inline=False)
+        cookie_embed.add_field(name=Cookie.LTMID_V2, value=cookies[Cookie.LTMID_V2], inline=False)
+        cookie_embed.add_field(name=Cookie.LTOKEN_V2, value=cookies[Cookie.LTOKEN_V2], inline=False)
 
         await interaction.response.send_message(embed=cookie_embed, ephemeral=True)
 

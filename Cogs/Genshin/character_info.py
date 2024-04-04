@@ -21,21 +21,21 @@ def get_avatar_data(avatarInfoList: List[AvatarInfoDetail], avatarId: Union[int,
 
 def get_element_color(element: str):
     match element:
-        case ElementType.WIND.value:
+        case ElementType.WIND:
             return ElementColor.WIND.value
-        case ElementType.ROCK.value:
+        case ElementType.ROCK:
             return ElementColor.ROCK.value
-        case ElementType.ELECTRIC.value:
+        case ElementType.ELECTRIC:
             return ElementColor.ELECTRIC.value
-        case ElementType.WATER.value:
+        case ElementType.WATER:
             return ElementColor.WATER.value
-        case ElementType.ICE.value:
+        case ElementType.ICE:
             return ElementColor.ICE.value
-        case ElementType.FIRE.value:
+        case ElementType.FIRE:
             return ElementColor.FIRE.value
-        case ElementType.GRASS.value:
+        case ElementType.GRASS:
             return ElementColor.GRASS.value
-        case ElementType.NONE.value:
+        case ElementType.NONE:
             return ElementColor.NONE.value
         case _:
             Logging.LOGGER.warning(f"존재하지 않는 원소 타입 (type: {element})")

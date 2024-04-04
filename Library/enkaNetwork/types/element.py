@@ -1,4 +1,4 @@
-from .base import BaseEnum
+from .base import BaseEnum, StrEnum
 
 class ElementColor(BaseEnum):
     ICE = 0x99FFFF
@@ -11,7 +11,7 @@ class ElementColor(BaseEnum):
 
     NONE = 0x000000
 
-class ElementType(BaseEnum):
+class ElementType(StrEnum):
     ICE = "Ice"
     FIRE = "Fire"
     WIND = "Wind"
