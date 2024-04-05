@@ -23,8 +23,6 @@ class DailyReward(commands.Cog):
         await interaction.response.defer()
 
         client = get_genshin_client(user_id=interaction.user.id)
-        if client == None:
-            raise exc.GenshinCookieException
 
         try:
             reward = await client.claim_daily_reward(game=game.value)
@@ -52,11 +50,9 @@ class DailyReward(commands.Cog):
             if user == None:
                 continue
 
-            client = get_genshin_client(user_id=user_id)
-            if client == None:
-                continue
-
             try:
+                client = get_genshin_client(user_id=user_id)
+
                 reward = await client.claim_daily_reward(game=genshin.types.Game.GENSHIN)
 
                 rewardEmbed = discord.Embed(title=f"출석체크 보상")
@@ -67,7 +63,8 @@ class DailyReward(commands.Cog):
                 await user.send(embed=rewardEmbed)
             except (genshin.errors.AlreadyClaimed,
                     genshin.errors.InvalidCookies,
-                    genshin.CookieException):
+                    genshin.CookieException,
+                    exc.GenshinInvalidCookies):
                 continue
             except Exception as e:
                 Logging.LOGGER.warning(f"{user_id} 출석체크 중 에러 발생")

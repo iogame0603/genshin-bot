@@ -18,8 +18,6 @@ class Notes(commands.Cog):
         await interaction.response.defer()
 
         client = get_genshin_client(user_id=interaction.user.id)
-        if client == None:
-            raise exc.GenshinCookieException
     
         try:
             note = await client.get_genshin_notes()
@@ -76,8 +74,6 @@ class Notes(commands.Cog):
         await interaction.response.defer()
 
         client = get_genshin_client(user_id=interaction.user.id)
-        if client == None:
-            raise exc.GenshinCookieException
     
         try:
             note = await client.get_genshin_notes()
@@ -102,8 +98,6 @@ class Notes(commands.Cog):
         await interaction.response.defer()
 
         client = get_genshin_client(user_id=interaction.user.id)
-        if client == None:
-            raise exc.GenshinCookieException
     
         try:
             note = await client.get_genshin_notes()
@@ -134,8 +128,6 @@ class Notes(commands.Cog):
         await interaction.response.defer()
 
         client = get_genshin_client(user_id=interaction.user.id)
-        if client == None:
-            raise exc.GenshinCookieException
     
         try:
             note = await client.get_genshin_notes()
@@ -155,8 +147,6 @@ class Notes(commands.Cog):
         await interaction.response.defer()
 
         client = get_genshin_client(user_id=interaction.user.id)
-        if client == None:
-            raise exc.GenshinCookieException
 
         try:
             note = await client.get_genshin_notes()

@@ -64,10 +64,7 @@ class GenshinCookie(commands.Cog):
     @cookie_group.command(name="확인", description="등록된 쿠키를 확인합니다.")
     async def show_cookie(self, interaction: discord.Interaction):
         cookies = get_cookies(user_id=interaction.user.id)
-        if cookies == None:
-            await interaction.response.send_message(content=f"{interaction.user.name}님은 등록된 쿠키가 없습니다.", ephemeral=True)
-            return
-        
+
         cookie_embed = discord.Embed(title=f"{interaction.user.name}님의 쿠키")
         cookie_embed.add_field(name=Cookie.LTUID_V2, value=cookies[Cookie.LTUID_V2], inline=False)
         cookie_embed.add_field(name=Cookie.LTMID_V2, value=cookies[Cookie.LTMID_V2], inline=False)
