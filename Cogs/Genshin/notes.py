@@ -61,7 +61,7 @@ class Notes(commands.Cog):
             
             ## 선계 화폐
             notesEmbed.add_field(name=f"<:currency:1218895320633573516> {note.current_realm_currency} / {note.max_realm_currency}",
-                                     value=f"남은 시간: {str(timedelta(seconds=note.realm_currency_recovery_time.second))}",
+                                     value=f"남은 시간: {str(note.remaining_realm_currency_recovery_time)}",
                                      inline=False)
 
             await interaction.followup.send(embed=notesEmbed)
@@ -153,7 +153,7 @@ class Notes(commands.Cog):
 
             currencyEmbed = discord.Embed(title="선계 화폐")
             currencyEmbed.add_field(name=f"<:currency:1218895320633573516> {note.current_realm_currency} / {note.max_realm_currency}",
-                                     value=f"남은 시간: {str(timedelta(seconds=note.realm_currency_recovery_time.second))}")
+                                     value=f"남은 시간: {str(note.remaining_realm_currency_recovery_time)}")
 
             await interaction.followup.send(embed=currencyEmbed)
         except genshin.errors.InvalidCookies:
