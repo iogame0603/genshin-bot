@@ -21,7 +21,7 @@ class GenshinStats(commands.Cog):
             data = await client.get_genshin_user(uid=uid)
             statsData: genshin.models.genshin.stats.Stats = data.stats
 
-            embed = discord.Embed(title="데이터 일람", description=f"닉네임: {data.info.nickname}")
+            embed = discord.Embed(title="데이터 일람")
             embed.set_thumbnail(url=IMAGE_URL)
             embed.add_field(name="활동 일수", value=statsData.days_active)
             embed.add_field(name="업적 달성 개수", value=statsData.achievements)
