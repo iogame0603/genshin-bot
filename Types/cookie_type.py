@@ -1,4 +1,4 @@
-from Library.enkaNetwork.types.base import StrEnum
+from enkaNetwork.types.base import StrEnum
 
 class Cookie(StrEnum):
     LTUID_V2 = "ltuid_v2"

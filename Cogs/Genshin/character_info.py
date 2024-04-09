@@ -5,10 +5,10 @@ from discord.ext import commands
 
 from typing import List, Union, Optional
 
-from Library.enkaNetwork.enkaNetworkClient import EnkaNetworkClient
-from Library.enkaNetwork.exception import HttpException
-from Library.enkaNetwork.model import AvatarInfoDetail, Reliquary
-from Library.enkaNetwork.types import ReliquaryType, ElementColor, ElementType
+from enkaNetwork.enkaNetworkClient import EnkaNetworkClient
+from enkaNetwork.exception import HttpException
+from enkaNetwork.model import AvatarInfoDetail, Reliquary
+from enkaNetwork.types import ReliquaryType, ElementColor, ElementType
 
 from Utils.util import Logging
 
