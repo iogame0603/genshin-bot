@@ -61,9 +61,7 @@ class DailyReward(commands.Cog):
                 rewardEmbed.add_field(name="수량", value=reward.amount, inline=True)
 
                 await user.send(embed=rewardEmbed)
-            except (genshin.errors.AlreadyClaimed,
-                    genshin.errors.InvalidCookies,
-                    genshin.CookieException,
+            except (genshin.errors.GenshinException,
                     exc.GenshinInvalidCookies):
                 continue
             except Exception as e:
