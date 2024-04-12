@@ -295,7 +295,7 @@ class GenshinCharacterInfo(commands.Cog):
         await interaction.response.defer()
         try:
             client = EnkaNetworkClient()
-            data = await client.fetch_user(uid=uid)
+            data = await client.fetch_genshin_user(uid=uid)
             if len(data.avatarInfoList) == 0:
                 await interaction.followup.send(content=f"{uid}계정은 공개된 캐릭터가 없습니다.")
                 return
