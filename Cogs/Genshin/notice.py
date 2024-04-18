@@ -21,7 +21,7 @@ class Notice(commands.Cog):
             await interaction.response.send_message(content=f"공지를 가져오는 중 에러가 발생했습니다. (code: {noticeList[1]})", ephemeral=True)
             return
 
-        cafe_imagge_url = "https://cafeptthumb-phinf.pstatic.net/MjAyMzExMDhfMjg5/MDAxNjk5NDEwNzY2MTYz.ZxdWHM87UFZXRLccFndyEHeveO4JeKsT6Zg-y37UPOQg.ydetICo0M45KZ84wY9-wGL3Y8Xn3S8MUyjNOLLOtArcg.PNG/02%25E5%259C%2586%25E5%25BD%25A2%25E5%25A4%25B4%25E5%2583%258F%25E7%2594%25A8_%2528For_rounded_avatars%2529.png?type=f150_150_mask"
+        cafe_imagge_url = "https://cafeptthumb-phinf.pstatic.net/MjAyNDA0MDFfMTkx/MDAxNzExOTgwMDQwMDMw.7kqHm2gxDYXT37Rvc0U64fBALzmfyVEDBnfbyLPFNF0g.xL4EF9pycJMPnMgIjY35nu6rY24SFPWkU0S5TW5uwpUg.PNG/%25EB%2584%25A4%25EC%259D%25B4%25EB%25B2%2584.png?type=f150_150_mask"
         
         p: Pagination = Pagination(interaction, title="원신 공식카페 공지", data=noticeList, offset=5, image_url=cafe_imagge_url, defer=True)
         await p.embed_pagination()
