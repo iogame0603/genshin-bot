@@ -74,6 +74,8 @@ class GenshinExplorations(commands.Cog):
             exp: Sequence[genshin.models.genshin.Exploration] = sorted(data.explorations, key=lambda e: e.id)
 
             await interaction.followup.send(view=ExplorationView(interaction.user, exp))
+        except ValueError:
+            await interaction.followup.send(content=f"``{uid}`` 알 수 없는 uid입니다.")
         except genshin.errors.AccountNotFound:
             await interaction.followup.send(content=f"{uid} 계정을 찾을 수 없습니다.")
         except genshin.errors.DataNotPublic:
