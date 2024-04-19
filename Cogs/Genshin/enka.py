@@ -316,7 +316,7 @@ class GenshinEnka(commands.Cog):
             await client.update_assets()
             await interaction.followup.send(content="에셋 업데이트가 완료되었습니다.", ephemeral=True)
         except:
-            Logging.LOGGER.warning("enka network 에셋 업데이트 실패")
+            Logging.LOGGER.exception("enka network 에셋 업데이트 실패")
             await interaction.followup.send(content="에셋 업데이트 실패", ephemeral=True)
 
 async def setup(bot: commands.Bot):
