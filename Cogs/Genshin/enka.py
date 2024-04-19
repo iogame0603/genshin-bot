@@ -285,11 +285,11 @@ class CharacterReliquaryView(View):
     async def on_timeout(self) -> None:
         await self.message.edit(view=None)
 
-class GenshinCharacterInfo(commands.Cog):
+class GenshinEnka(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name="캐릭터_정보", description="캐릭터의 정보를 확인합니다.")
+    @app_commands.command(name="엔카", description="엔카 네트워크의 정보를 확인합니다.")
     @app_commands.describe(uid="검색할 유저의 uid입니다.")
     async def character_info(self, interaction: discord.Interaction, uid: int):
         await interaction.response.defer()
@@ -320,4 +320,4 @@ class GenshinCharacterInfo(commands.Cog):
             await interaction.followup.send(content="에셋 업데이트 실패", ephemeral=True)
 
 async def setup(bot: commands.Bot):
-    await bot.add_cog(GenshinCharacterInfo(bot))
+    await bot.add_cog(GenshinEnka(bot))
