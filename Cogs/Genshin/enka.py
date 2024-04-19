@@ -313,7 +313,7 @@ class GenshinEnka(commands.Cog):
 
         client = EnkaNetworkClient()
         try:
-            await client.update_assets()
+            await client.update_genshin_assets()
             await interaction.followup.send(content="에셋 업데이트가 완료되었습니다.", ephemeral=True)
         except:
             Logging.LOGGER.exception("enka network 에셋 업데이트 실패")
