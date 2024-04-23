@@ -31,7 +31,8 @@ def get_notice():
     return List[게시글 이름, 게시글 url]"""
 
     url = "https://cafe.naver.com/MyCafeIntro.nhn?clubid=29893655"
-    req = requests.get(url=url)
+    headers = {"user-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"}
+    req = requests.get(url=url, headers=headers)
     if req.status_code != 200:
         return [None, req.status_code]
     soup = BeautifulSoup(req.text, "html.parser")
