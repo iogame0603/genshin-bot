@@ -5,7 +5,7 @@ from Utils.Genshin.cookie import *
 
 import exception as exc
 import matplotlib.pyplot as plt
-from typing import List
+from typing import List, Optional
 from datetime import datetime
 
 
@@ -33,12 +33,16 @@ class Dirary(commands.Cog):
             plt.savefig(f"images/diary/{channel_id}/{user_id}_diary.png", bbox_inches="tight")
 
     @app_commands.command(name="여행자_핸드북", description="여행자 핸드북을 확인합니다.")
-    async def diary(self, interaction: discord.Interaction):
+    @app_commands.describe("month", "확인할 월을 입력합니다. 범위: 현재 월 - 2, 기본값: 현재 월")
+    async def diary(self, interaction: discord.Interaction, month: Optional[int]):
+        if month == None:
+            month = datetime.month
+
         try:
             await interaction.response.defer()
             client = get_genshin_client(user_id=interaction.user.id)
 
-            diary = await client.get_diary(lang="ko-kr")
+            diary = await client.get_diary(lang="ko-kr", month=month)
             data: genshin.models.genshin.MonthDiaryData = diary.data
 
             self.create_pie_chart(categories=data.categories, channel_id=interaction.channel_id, user_id=interaction.user.id)
@@ -59,6 +63,8 @@ class Dirary(commands.Cog):
 
         except genshin.errors.InvalidCookies:
             raise exc.GenshinInvalidCookies
+        except genshin.errors.GenshinException:
+            await interaction.followup.send(content="월은 현재 기준 -2달입니다.", ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Dirary(bot))
