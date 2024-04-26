@@ -142,19 +142,20 @@ class CharacterReliquaryBtn(Button):
         characterReliquaryView.message = await interaction.followup.edit_message(interaction.message.id, view=characterReliquaryView)
 
 class CharacterInfoView(View):
-    def __init__(self, author: Union[discord.User, discord.Member], data: List[AvatarInfoDetail], avatarId: Union[int, str]):
+    def __init__(self, author: Union[discord.User, discord.Member], data: List[AvatarInfoDetail]):
         self.author = author
         self.data = data
+        self.avatarId = data[0].id
         super().__init__(timeout=None)
 
-        avatarInfo = get_avatar_data(avatarInfoList=data, avatarId=avatarId)
+        avatarInfo = get_avatar_data(avatarInfoList=data, avatarId=self.avatarId)
         self.add_item(item=CharacterSelect(data=data))
         self.add_item(item=CharacterInfoBtn(data=avatarInfo))
         self.add_item(item=CharacterWeaponBtn(data=avatarInfo))
         if avatarInfo.reliquaryList == []:
-            self.add_item(item=CharacterReliquaryBtn(avatarId=avatarId, avatarInfoList=data, disabled=True))
+            self.add_item(item=CharacterReliquaryBtn(avatarId=self.avatarId, avatarInfoList=data, disabled=True))
         else:
-            self.add_item(item=CharacterReliquaryBtn(avatarId=avatarId, avatarInfoList=data))
+            self.add_item(item=CharacterReliquaryBtn(avatarId=self.avatarId, avatarInfoList=data))
 
     @classmethod
     def from_message(cls, message: discord.Message, data: List[AvatarInfoDetail], avatarId: Union[int, str]):
