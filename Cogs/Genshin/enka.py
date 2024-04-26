@@ -15,26 +15,29 @@ class GenshinEnka(commands.Cog):
         self.bot = bot
 
     @app_commands.command(name="엔카", description="엔카 네트워크의 정보를 확인합니다.")
-    @app_commands.describe(uid="검색할 유저의 uid입니다.")
+    @app_commands.describe(uid="검색할 유저의 uid입니다.", game="검색할 게임입니다. 기본값: 원신")
     @app_commands.choices(game=[
         Choice(name="원신", value=0),
         Choice(name="스타레일", value=1)
     ])
-    async def enkaNetwork(self, interaction: discord.Interaction, uid: int, game: Choice[int]):
+    async def enkaNetwork(self, interaction: discord.Interaction, uid: int, game: Choice[int] = 0):
         await interaction.response.defer()
+
         try:
             client = EnkaNetworkClient()
 
             if game == 0:
                 data = await client.fetch_genshin_user(uid=uid)
                 if len(data.avatarInfoList) == 0:
-                    await interaction.followup.send(content=f"{uid}계정은 공개된 캐릭터가 없습니다.")
+                    await interaction.followup.send(content=f"{uid}계정은 공개한 캐릭터가 없습니다.")
                     return
                 characterInfoView = CharacterInfoView(author=interaction.user, data=data.avatarInfoList, avatarId=data.avatarInfoList[0].id)
                 characterInfoView.message = await interaction.followup.send(embed=character_info_embed(data.avatarInfoList[0]),
                                                                             view=characterInfoView)
             elif game == 1:
-                pass
+                data = await client.fetch_starrail_user(uid=uid)
+                
+                # TODO
 
         except HttpException:
             Logging.LOGGER.warning("데이터 로드 실패")
