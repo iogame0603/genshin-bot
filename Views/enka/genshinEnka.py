@@ -194,8 +194,7 @@ class ReliquaryBackBtn(Button):
                                                 embed=character_info_embed(get_avatar_data(avatarInfoList=self.avatarInfoList,
                                                                                            avatarId=self.avatarId)),
                                                 view=CharacterInfoView(author=self.author,
-                                                                       data=self.avatarInfoList,
-                                                                       avatarId=self.avatarId))
+                                                                       data=self.avatarInfoList))
 
 class ReliquaryBtn(Button):
     def __init__(self, label: str, custom_id: str, disabled: bool = False, reliquaryData: Optional[Reliquary] = None, avatarInfo: Optional[AvatarInfoDetail] = None):
