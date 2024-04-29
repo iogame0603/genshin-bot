@@ -14,8 +14,6 @@ def get_cookies(user_id: int) -> Dict[Cookie, Any]:
     cookies = select_cookies(user_id)
     if cookies == None:
         raise exc.GenshinCookieException
-    ## test
-    print(cookies)
     return {
                 Cookie.LTUID_V2.value: cookies[0],
                 Cookie.LTMID_V2.value: RSA_CRYPTO.decrypt_msg(__PRIVATE_KEY, cookies[1]),
