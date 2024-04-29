@@ -64,7 +64,7 @@ def database_close(cursor, conn):
         
 @__connect_database
 def select_cookies(cursor, user_id: int):
-    query = "SELECT {Cookie.LTUID_V2}, {Cookie.LTMID_V2}, {Cookie.LTOKEN_V2} FROM USER_INFO WHERE USER_ID = %s"
+    query = f"SELECT {Cookie.LTUID_V2}, {Cookie.LTMID_V2}, {Cookie.LTOKEN_V2} FROM USER_INFO WHERE USER_ID = %s"
     cursor.execute(query, (user_id,))
     return cursor.fetchone()
 
@@ -79,7 +79,7 @@ def insert_cookies(cursor, user_id: int, ltuid_v2: str, ltmid_v2: str, ltoken_v2
 
 @__connect_database
 def update_cookies(cursor, user_id: int, cookie_type: Cookie, cookie: Union[int, str]):
-    query = "UPDATE USER_INFO SET {cookie_type.upper()} = %s WHERE USER_ID = %s"
+    query = f"UPDATE USER_INFO SET {cookie_type.upper()} = %s WHERE USER_ID = %s"
 
     if cookie_type != Cookie.LTUID_V2:
         cookie = RSA_CRYPTO.encrypt_msg(PUBLIC_KEY, cookie)
