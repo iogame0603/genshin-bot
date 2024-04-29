@@ -44,9 +44,11 @@ async def on_app_command_error(interaction: discord.Interaction, error: discord.
 
     match type(error):
         case exc.GenshinCookieException:
-            await interaction.followup.send(content=f"등록된 쿠키가 없습니다.")
+            await interaction.followup.send(content="등록된 쿠키가 없습니다.")
         case exc.GenshinInvalidCookies:
-            await interaction.followup.send(content=f"유효하지 않은 쿠키입니다.")
+            await interaction.followup.send(content="유효하지 않은 쿠키입니다.")
+        case exc.DataBaseException:
+            await interaction.followup.send(content="처리 중 에러가 발생했습니다.")
         case _:
             Logging.LOGGER.exception(f"알 수 없는 에러")
             await interaction.followup.send(content="알 수 없는 에러가 발생했습니다.", ephemeral=True)
