@@ -7,7 +7,7 @@ from enkaNetwork.enkaNetworkClient import EnkaNetworkClient
 from enkaNetwork.exception import HttpException
 
 from Views.enka.genshinEnka import CharacterInfoView, character_info_embed
-from Views.enka.honkaiStarrailEnka import HsrCharacterInfoView
+# from Views.enka.honkaiStarrailEnka import HsrCharacterInfoView
 
 from Utils.util import Logging
 
@@ -36,11 +36,14 @@ class GenshinEnka(commands.Cog):
                 characterInfoView.message = await interaction.followup.send(embed=character_info_embed(data.avatarInfoList[0]),
                                                                             view=characterInfoView)
             elif game == 1:
-                data = await client.fetch_starrail_user(uid=uid)
+                await interaction.followup.send(content="개발중")
+                # data = await client.fetch_starrail_user(uid=uid)
                 
-                if len(data.avatarInfoList) == 0:
-                    await interaction.followup.send(content=f"{uid}계정은 공개한 캐릭터가 없습니다.")
-                    return
+                # if len(data.avatarInfoList) == 0:
+                #     await interaction.followup.send(content=f"{uid}계정은 공개한 캐릭터가 없습니다.")
+                #     return
+                # characterInfoView = HsrCharacterInfoView(author=interaction.user, data=data.avatarInfoList)
+                # characterInfoView.message = await interaction.followup.send(view=characterInfoView)
 
         except HttpException:
             Logging.LOGGER.warning("데이터 로드 실패")
