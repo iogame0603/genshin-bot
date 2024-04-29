@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 from Types.cookie_type import Cookie
 from Utils.util import RSA_CRYPTO, Logging
 
+from typing import Union
+
 load_dotenv()
 
 HOST = os.getenv("DB_HOST")
@@ -62,13 +64,13 @@ def database_close(cursor, conn):
         
 @__connect_database
 def select_cookies(cursor, user_id: int):
-    query = f"SELECT {Cookie.LTUID_V2}, {Cookie.LTMID_V2}, {Cookie.LTOKEN_V2} FROM USER_INFO WHERE USER_ID = %s"
+    query = "SELECT {Cookie.LTUID_V2}, {Cookie.LTMID_V2}, {Cookie.LTOKEN_V2} FROM USER_INFO WHERE USER_ID = %s"
     cursor.execute(query, (user_id,))
     return cursor.fetchone()
 
 @__connect_database
 def insert_cookies(cursor, user_id: int, ltuid_v2: str, ltmid_v2: str, ltoken_v2: str):
-    query = f"INSERT INTO USER_INFO VALUES (%s, %s, %s, %s)"
+    query = "INSERT INTO USER_INFO VALUES (%s, %s, %s, %s)"
 
     ltmid_v2 = RSA_CRYPTO.encrypt_msg(PUBLIC_KEY, ltmid_v2)
     ltoken_v2 = RSA_CRYPTO.encrypt_msg(PUBLIC_KEY, ltoken_v2)
@@ -76,10 +78,10 @@ def insert_cookies(cursor, user_id: int, ltuid_v2: str, ltmid_v2: str, ltoken_v2
     cursor.execute(query, (user_id, ltuid_v2, ltmid_v2, ltoken_v2))
 
 @__connect_database
-def update_cookies(cursor, user_id: int, cookie_type: Cookie, cookie: str):
-    query = f"UPDATE USER_INFO SET {cookie_type.upper()} = %s WHERE USER_ID = %s"
+def update_cookies(cursor, user_id: int, cookie_type: Cookie, cookie: Union[int, str]):
+    query = "UPDATE USER_INFO SET {cookie_type.upper()} = %s WHERE USER_ID = %s"
 
-    if cookie != "":
+    if cookie_type != Cookie.LTUID_V2:
         cookie = RSA_CRYPTO.encrypt_msg(PUBLIC_KEY, cookie)
 
     cursor.execute(query, (cookie, user_id,))
