@@ -1,10 +1,20 @@
-import sqlite3
+import pymysql
+
+import os
+from dotenv import load_dotenv
 
 from Types.cookie_type import Cookie
-from dotenv import load_dotenv
 from Utils.util import RSA_CRYPTO, Logging
 
+from typing import Union
+
 load_dotenv()
+
+HOST = os.getenv("DB_HOST")
+PORT = int(os.getenv("DB_PORT"))
+ID = os.getenv("DB_ID")
+PW = os.getenv("DB_PW")
+DATABASE = os.getenv("DB_NAME")
 
 PUBLIC_KEY = """-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuPuuyo3veWCTuFxT1ZV6
@@ -18,26 +28,30 @@ YQIDAQAB
 
 def __connect_database(func):
     def connect_database(*args, **kwargs):
+        import exception as exc
+
         conn = None
         cursor = None
         try:
-            conn = sqlite3.connect("databases/user_info.db")
+            conn = pymysql.connect(host=HOST, port=PORT, user=ID, password=PW, database=DATABASE, charset="utf8")
             cursor = conn.cursor()
 
             result = func(cursor, *args, **kwargs)
 
             conn.commit()
 
-            cursor.close()
-            conn.close()
+            database_close(cursor, conn)
 
             return result
-        except sqlite3.Error as se:
+        except pymysql.Error as se:
+            Logging.LOGGER.exception(f"database 작업 중 에러 발생")
             database_close(cursor, conn)
-            Logging.LOGGER.error(f"database 작업 중 에러 발생")
+            raise exc.DataBaseException()
         except Exception as e:
+            Logging.LOGGER.exception(f"에러 발생")
             database_close(cursor, conn)
-            Logging.LOGGER.error(f"database 작업 중 에러 발생")
+            raise exc.DataBaseException()
+
     return connect_database
 
 
@@ -49,24 +63,14 @@ def database_close(cursor, conn):
 
         
 @__connect_database
-def __create_cookie_info_table(cursor: sqlite3.Cursor):
-    query = """CREATE TABLE USER_INFO(
-        USER_ID INT PRIMARY KEY,
-        LTUID_V2 STR,
-        LTMID_V2 STR,
-        LTOKEN_V2 STR
-    )"""
-    cursor.execute(query)
-
-@__connect_database
-def select_cookies(cursor: sqlite3.Cursor, user_id: int):
-    query = f"SELECT {Cookie.LTUID_V2}, {Cookie.LTMID_V2}, {Cookie.LTOKEN_V2} FROM USER_INFO WHERE USER_ID = ?"
+def select_cookies(cursor, user_id: int):
+    query = "SELECT {Cookie.LTUID_V2}, {Cookie.LTMID_V2}, {Cookie.LTOKEN_V2} FROM USER_INFO WHERE USER_ID = %s"
     cursor.execute(query, (user_id,))
     return cursor.fetchone()
 
 @__connect_database
-def insert_cookies(cursor: sqlite3.Cursor, user_id: int, ltuid_v2: str, ltmid_v2: str, ltoken_v2: str):
-    query = f"INSERT INTO USER_INFO VALUES (?, ?, ?, ?)"
+def insert_cookies(cursor, user_id: int, ltuid_v2: str, ltmid_v2: str, ltoken_v2: str):
+    query = "INSERT INTO USER_INFO VALUES (%s, %s, %s, %s)"
 
     ltmid_v2 = RSA_CRYPTO.encrypt_msg(PUBLIC_KEY, ltmid_v2)
     ltoken_v2 = RSA_CRYPTO.encrypt_msg(PUBLIC_KEY, ltoken_v2)
@@ -74,21 +78,21 @@ def insert_cookies(cursor: sqlite3.Cursor, user_id: int, ltuid_v2: str, ltmid_v2
     cursor.execute(query, (user_id, ltuid_v2, ltmid_v2, ltoken_v2))
 
 @__connect_database
-def update_cookies(cursor: sqlite3.Cursor, user_id: int, cookie_type: Cookie, cookie: str):
-    query = f"UPDATE USER_INFO SET {cookie_type.upper()} = ? WHERE USER_ID = ?"
+def update_cookies(cursor, user_id: int, cookie_type: Cookie, cookie: Union[int, str]):
+    query = "UPDATE USER_INFO SET {cookie_type.upper()} = %s WHERE USER_ID = %s"
 
-    if cookie != "":
+    if cookie_type != Cookie.LTUID_V2:
         cookie = RSA_CRYPTO.encrypt_msg(PUBLIC_KEY, cookie)
 
     cursor.execute(query, (cookie, user_id,))
 
 @__connect_database
-def delete_cookies(cursor: sqlite3.Cursor, user_id: int):
-    query = "DELETE FROM USER_INFO WHERE USER_ID = ?"
+def delete_cookies(cursor, user_id: int):
+    query = "DELETE FROM USER_INFO WHERE USER_ID = %s"
     cursor.execute(query, (user_id,))
 
 @__connect_database
-def select_users(cursor: sqlite3.Cursor):
+def select_users(cursor):
     query = "SELECT USER_ID FROM USER_INFO"
     cursor.execute(query)
     return cursor.fetchall()
