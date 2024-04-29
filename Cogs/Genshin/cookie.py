@@ -90,10 +90,10 @@ class GenshinCookie(commands.Cog):
     @commands.is_owner()
     @app_commands.command(name="유저_쿠키_확인", description="특정 유저의 쿠키를 확인합니다.")
     @app_commands.describe(user_id = "사용자 id의 쿠키를 확인합니다.")
-    async def show_all_cookies(self, interaction: discord.Interaction, user_id: int):
+    async def show_all_cookies(self, interaction: discord.Interaction, user_id: str):
         await interaction.response.defer()
 
-        cookies = get_cookies(user_id=user_id)
+        cookies = get_cookies(user_id=int(user_id))
         
         cookie_embed = discord.Embed(title=f"{user_id}님의 쿠키")
         cookie_embed.add_field(name=Cookie.LTUID_V2, value=cookies[Cookie.LTUID_V2], inline=False)
