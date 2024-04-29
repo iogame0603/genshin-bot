@@ -153,7 +153,7 @@ class Logging:
     LOGGER = logging.getLogger(__name__)
 
     logging.basicConfig(
-        filename=f"Log/{datetime.now().strftime('%Y%m%d')}.log",
+        # filename=f"Log/{datetime.now().strftime('%Y%m%d')}.log",
         format="%(asctime)s [%(levelname)s]\t%(filename)s (line: %(lineno)d) --> %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
         filemode="w",
