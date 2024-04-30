@@ -24,8 +24,7 @@ class RSA_CRYPTO:
     # 복호화
     @classmethod
     def decrypt_msg(cls, private_key, encrypted_message):
-        print(private_key.replace("\\n", "\n"))
-        rsa_key = RSA.import_key(private_key.replace("\\n", "\n"))
+        rsa_key = RSA.import_key(private_key.replace("\\\\n", "\n"))
         cipher = PKCS1_OAEP.new(rsa_key)
         decrypted_message = cipher.decrypt(encrypted_message).decode()
         return decrypted_message
