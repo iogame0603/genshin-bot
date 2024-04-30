@@ -63,7 +63,10 @@ class PaginationBtn(discord.ui.View):
         embed.set_thumbnail(url=self.image_url)
         embed.clear_fields()
         for o in range(self.offset):
-            embed.add_field(name=embed_data[0][o], value=embed_data[1][o], inline=False)
+            try:
+                embed.add_field(name=embed_data[0][o], value=embed_data[1][o], inline=False)
+            except IndexError:
+                break
         embed.set_footer(text=f"{self.current_page} / {self.max_page}")
 
         return embed
