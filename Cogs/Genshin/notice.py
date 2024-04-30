@@ -18,7 +18,7 @@ class Notice(commands.Cog):
         noticeList = get_notice()
 
         if noticeList[0] == None:
-            await interaction.response.send_message(content=f"공지를 가져오는 중 에러가 발생했습니다. (code: {noticeList[1]})", ephemeral=True)
+            await interaction.followup.send(content=f"공지를 가져오는 중 에러가 발생했습니다. (code: {noticeList[1]})", ephemeral=True)
             return
 
         cafe_imagge_url = "https://cafeptthumb-phinf.pstatic.net/MjAyNDA0MDFfMTkx/MDAxNzExOTgwMDQwMDMw.7kqHm2gxDYXT37Rvc0U64fBALzmfyVEDBnfbyLPFNF0g.xL4EF9pycJMPnMgIjY35nu6rY24SFPWkU0S5TW5uwpUg.PNG/%25EB%2584%25A4%25EC%259D%25B4%25EB%25B2%2584.png?type=f150_150_mask"
