@@ -42,7 +42,7 @@ def get_notice():
     noticeUrlList = []
     noticeNameList = []
 
-    soup_1 = soup.select(selector=".board-notice.type_main")
+    soup_1 = soup.select(selector=".board-notice")
     for s in soup_1:
         a_tag = s.find_all("a", {"class", "article"})
         for a in a_tag:
