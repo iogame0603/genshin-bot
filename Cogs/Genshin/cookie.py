@@ -45,7 +45,7 @@ class GenshinCookie(commands.Cog):
 
     @cookie_group.command(name="확인", description="등록된 쿠키를 확인합니다.")
     async def show_cookie(self, interaction: discord.Interaction):
-        await interaction.response.defer()
+        await interaction.response.defer(ephemeral=True)
 
         cookies = get_cookies(user_id=interaction.user.id)
 
@@ -54,7 +54,7 @@ class GenshinCookie(commands.Cog):
         cookie_embed.add_field(name=Cookie.LTMID_V2, value=cookies[Cookie.LTMID_V2], inline=False)
         cookie_embed.add_field(name=Cookie.LTOKEN_V2, value=cookies[Cookie.LTOKEN_V2], inline=False)
 
-        await interaction.followup.send(embed=cookie_embed, ephemeral=True)
+        await interaction.followup.send(embed=cookie_embed)
 
     @cookie_group.command(name="삭제", description="쿠키를 삭제합니다.")
     async def delete_cookie(self, interaction: discord.Interaction):
@@ -91,7 +91,7 @@ class GenshinCookie(commands.Cog):
     @app_commands.command(name="유저_쿠키_확인", description="특정 유저의 쿠키를 확인합니다.")
     @app_commands.describe(user_id = "사용자 id의 쿠키를 확인합니다.")
     async def show_all_cookies(self, interaction: discord.Interaction, user_id: str):
-        await interaction.response.defer()
+        await interaction.response.defer(ephemeral=True)
 
         cookies = get_cookies(user_id=int(user_id))
         
@@ -100,7 +100,7 @@ class GenshinCookie(commands.Cog):
         cookie_embed.add_field(name=Cookie.LTMID_V2, value=cookies[Cookie.LTMID_V2], inline=False)
         cookie_embed.add_field(name=Cookie.LTOKEN_V2, value=cookies[Cookie.LTOKEN_V2], inline=False)
 
-        await interaction.followup.send(embed=cookie_embed, ephemeral=True)
+        await interaction.followup.send(embed=cookie_embed)
 
 
 async def setup(bot: commands.Bot):
