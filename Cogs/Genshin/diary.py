@@ -4,10 +4,11 @@ from discord.ext import commands
 from Utils.Genshin.cookie import *
 
 import exception as exc
-import matplotlib.pyplot as plt
 from typing import List, Optional
 from datetime import datetime
 
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 
 class Dirary(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -21,7 +22,8 @@ class Dirary(commands.Cog):
         for c in categories:
             labels.append(f"{c.name} ({c.percentage}%)")
         
-        plt.rc("font", family="DejaVuSans")
+        fontPath = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+        plt.rc("font", family=fm.FontProperties(fname=fontPath).get_name())
         plt.pie(x=values, wedgeprops={'linewidth': 1.5, 'edgecolor': 'white'})
         plt.legend(loc="center right",  labels=labels, bbox_transform=plt.gcf().transFigure, bbox_to_anchor=(0.9, 0.5))
         plt.subplots_adjust(left=0.0, bottom=0.1, right=0.7)
