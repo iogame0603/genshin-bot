@@ -21,7 +21,7 @@ class Dirary(commands.Cog):
         for c in categories:
             labels.append(f"{c.name} ({c.percentage}%)")
         
-        plt.rc("font", family="truetype")
+        plt.rc("font", family="DejaVuSans")
         plt.pie(x=values, wedgeprops={'linewidth': 1.5, 'edgecolor': 'white'})
         plt.legend(loc="center right",  labels=labels, bbox_transform=plt.gcf().transFigure, bbox_to_anchor=(0.9, 0.5))
         plt.subplots_adjust(left=0.0, bottom=0.1, right=0.7)
