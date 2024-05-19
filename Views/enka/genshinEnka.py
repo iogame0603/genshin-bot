@@ -1,7 +1,7 @@
 import discord
 from discord.ui import Button, View, Select, Item
 
-from typing import List, Union, Optional
+from typing import Any, List, Union, Optional
 
 from enkaNetwork.model import AvatarInfoDetail, Reliquary
 from enkaNetwork.types import ReliquaryType, ElementColor, ElementType
@@ -142,10 +142,14 @@ class CharacterReliquaryBtn(Button):
         characterReliquaryView.message = await interaction.followup.edit_message(interaction.message.id, view=characterReliquaryView)
 
 class CharacterInfoView(View):
-    def __init__(self, author: Union[discord.User, discord.Member], data: List[AvatarInfoDetail]):
+    def __init__(self, author: Union[discord.User, discord.Member], data: List[AvatarInfoDetail], avatarId: int = None):
         self.author = author
         self.data = data
-        self.avatarId = data[0].id
+        self.avatarId = None
+        if avatarId == None:
+            self.avatarId = data[0].id
+        else:
+            self.avatarId = avatarId
         super().__init__(timeout=None)
 
         avatarInfo = get_avatar_data(avatarInfoList=data, avatarId=self.avatarId)
@@ -194,7 +198,8 @@ class ReliquaryBackBtn(Button):
                                                 embed=character_info_embed(get_avatar_data(avatarInfoList=self.avatarInfoList,
                                                                                            avatarId=self.avatarId)),
                                                 view=CharacterInfoView(author=self.author,
-                                                                       data=self.avatarInfoList))
+                                                                       data=self.avatarInfoList,
+                                                                       avatarId=self.avatarId))
 
 class ReliquaryBtn(Button):
     def __init__(self, label: str, custom_id: str, disabled: bool = False, reliquaryData: Optional[Reliquary] = None, avatarInfo: Optional[AvatarInfoDetail] = None):
@@ -233,6 +238,7 @@ class CharacterReliquaryView(View):
 
         super().__init__(timeout=None)
 
+        self.add_item(CharacterSelect(avatarInfoList))
         self.add_item(ReliquaryBackBtn(self.author, self.avatarId, self.avatarInfoList))
 
         for r in ReliquaryType.enumToList():
