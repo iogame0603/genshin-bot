@@ -7,8 +7,8 @@ import exception as exc
 from typing import List, Optional
 from datetime import datetime
 
-import matplotlib.pyplot as plt
-import matplotlib.font_manager as fm
+# import matplotlib.pyplot as plt
+# import matplotlib.font_manager as fm
 
 class Dirary(commands.Cog):
     def __init__(self, bot: commands.Bot):
